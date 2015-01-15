@@ -161,15 +161,23 @@ class block_filtered_course_list extends block_base {
                         break;
                 }
 
-                foreach ($filteredcourses as $section => $courslist) {
-                    if (count($courslist) == 0) {
+                foreach ($filteredcourses as $section => $courselist) {
+                    if (count($courselist) == 0) {
                         continue;
                     }
-                    $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section'));
+                    $dimmed = '';
+                    if ( array_key_exists('visible', $courselist) ) {
+                        if ( $courselist['visible'] == 0 ) {
+                            $dimmed = ' dimmed_text';
+                        }
+                    }
+                    $this->content->text .= html_writer::tag('div', $section, array('class' => 'course-section' . $dimmed));
                     $this->content->text .= '<ul class="' . $collapsibleclass . 'list">';
 
-                    foreach ($courslist as $course) {
-                        $this->content->text .= $this->_print_single_course($course);
+                    foreach ($courselist as $key => $course) {
+                        if ( is_int($key) ) {
+                            $this->content->text .= $this->_print_single_course($course);
+                        }
                     }
                     $this->content->text .= '</ul>';
                     // If we can update any course of the view all isn't hidden.
@@ -230,7 +238,9 @@ class block_filtered_course_list extends block_base {
                     if ($courses) {
                         $this->content->text .= '<ul class="' . $collapsibleclass . 'list">';
                         foreach ($courses as $course) {
-                            $this->content->text .= $this->_print_single_course($course);
+                            if ( is_int($key) ) {
+                                $this->content->text .= $this->_print_single_course($course);
+                            }
                         }
                         $this->content->text .= '</ul>';
 
@@ -336,6 +346,7 @@ class block_filtered_course_list extends block_base {
                 }
                 if ($course->category == $cat['id']) {
                     $results[$cat['name']][] = $course;
+                    $results[$cat['name']]['visible'] = $cat['visible'];
                     unset($courses[$key]);
                 }
             }
