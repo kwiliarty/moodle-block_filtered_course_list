@@ -27,9 +27,7 @@ Feature: Hidden categories are dimmed for those who can see them
         And I press "Blocks editing on"
         And I add the "filtered_course_list" block
         When I navigate to "Filtered course list" node in "Site administration>Plugins>Blocks"
-        Then I should see "Top" in the "#id_s__block_filtered_course_list_categories" "css_element"
+        And I set the field "s__block_filtered_course_list_categories" to "Test"
+        Then "Test" "link" should be visible
         And "Cat 1" "link" should be visible
         And "Cat 2" "link" should be visible
-        When I set the field "s__block_filtered_course_list_categories" to "Cat 1"
-        Then "Cat 1" "link" should be visible
-        And "Cat 2" "link" should not be visible
