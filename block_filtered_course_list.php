@@ -339,6 +339,10 @@ class block_filtered_course_list extends block_base {
         $results = array();
         $other = array();
 
+        echo "<pre>";
+        print_r($mycats);
+        echo "</pre>";
+
         foreach ($mycats as $cat) {
             foreach ($courses as $key => $course) {
                 if ($course->id == SITEID) {
@@ -346,7 +350,9 @@ class block_filtered_course_list extends block_base {
                 }
                 if ($course->category == $cat['id']) {
                     $results[$cat['name']][] = $course;
-                    $results[$cat['name']]['visible'] = $cat['visible'];
+                    if ( array_key_exists('visible', $cat) ) {
+                        $results[$cat['name']]['visible'] = $cat['visible'];
+                    }
                     unset($courses[$key]);
                 }
             }
